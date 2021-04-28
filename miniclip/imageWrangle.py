@@ -1,6 +1,6 @@
 from PIL import Image
 import numpy as np
-from streamlit.logger import update_formatter
+# from streamlit.logger import update_formatter
 import torch
 from matplotlib import cm
 
@@ -36,6 +36,13 @@ def upscale_pytorch(img:np.array, size):
     return upsampler(torch_img)[0].permute(1,2,0).cpu().numpy()
 
 
+def heatmap_helper(image:torch.Tensor, heatmap: torch.Tensor, size=None, alpha=.6):
+    if not size:
+        size = image.shape[1]
+
+    img = numpy_to_image(min_max_norm(heatmap).numpy(), size)
+    return np.asarray(img)
+
 def heatmap(image:torch.Tensor, heatmap: torch.Tensor, size=None, alpha=.6):
     if not size:
         size = image.shape[1]
@@ -44,9 +51,6 @@ def heatmap(image:torch.Tensor, heatmap: torch.Tensor, size=None, alpha=.6):
 
     img = torch_to_rgba(image).numpy() # [0...1] rgba numpy "image"
     hm = cm.hot(min_max_norm(heatmap).numpy()) # [0...1] rgba numpy "image"
-
-    # print(hm.shape, hm)
- #
 
     img = np.array(numpy_to_image(img,size))
     hm = np.array(numpy_to_image(hm, size))
