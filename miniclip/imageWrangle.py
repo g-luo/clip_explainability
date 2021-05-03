@@ -50,7 +50,7 @@ def heatmap(image:torch.Tensor, heatmap: torch.Tensor, size=None, alpha=.6):
     # print(min_max_norm(heatmap))
 
     img = torch_to_rgba(image).numpy() # [0...1] rgba numpy "image"
-    hm = cm.hot(min_max_norm(heatmap).numpy()) # [0...1] rgba numpy "image"
+    hm = cm.jet(min_max_norm(heatmap).numpy()) # [0...1] rgba numpy "image"
 
     img = np.array(numpy_to_image(img,size))
     hm = np.array(numpy_to_image(hm, size))
